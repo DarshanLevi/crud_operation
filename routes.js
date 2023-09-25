@@ -28,7 +28,7 @@ router.get('/tasks', async (req, res) => {
 // Update a task by ID
 router.patch('/tasks/:id', async (req, res) => {
   const updates = Object.keys(req.body);
-  const allowedUpdates = ['title', 'description','age', 'completed'];
+  const allowedUpdates = ['title', 'description','games'];
   const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
 
   if (!isValidOperation) {
@@ -52,12 +52,13 @@ router.delete('/tasks/:id', async (req, res) => {
   try {
     const task = await Task.findByIdAndDelete(req.params.id);
     if (!task) {
-      return res.status(404).send();
+      return res.status(404).send(); // Task not found
     }
-    res.send(task);
+    
+    res. status(200).send({ messageDel: 'Task successfully deleted' }); // Success message
   } catch (error) {
     console.error(error);
-    res.status(500).send(error);
+    res.status(500).send(error); // Internal Server Error
   }
 });
 
